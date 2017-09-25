@@ -2,7 +2,7 @@
 collection of script/tools for security check 
 
 1. 是否異常程序有奇怪聯網行為
-	-DOS Command: netstat -ano
+	-DOS Command: netstat -abno
 	-Process Explorer Microsoft https://docs.microsoft.com/en-us/sysinternals/downloads/process-explorer
 	-Process Hacker https://github.com/processhacker2/processhacker
 	-CurrPorts http://www.nirsoft.net/utils/cports.html
