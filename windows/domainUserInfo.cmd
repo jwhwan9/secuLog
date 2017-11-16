@@ -4,29 +4,32 @@ md %logFolder%
 
 @echo off
 
-REM Domain User Account å–å¾—ç›®å‰ DC å¸³è™Ÿè³‡è¨Š
+REM Domain User Account ¨ú±o¥Ø«e DC ±b¸¹¸ê°T
 net user /domain %username% > %logFolder%\Current.Account.%date:~-15,4%.txt
 
-REM Lists all of the domain users å–å¾—æ‰€æœ‰ DC å¸³è™Ÿ
+REM Kerberos Ticket Cache
+klist   > %logFolder%\KerberosTicketCache.%date:~-15,4%.txt
+
+REM Lists all of the domain users ¨ú±o©Ò¦³ DC ±b¸¹
 net user /domain  > %logFolder%\Domain.User.%date:~-15,4%.txt
 
-REM å–å¾—æ‰€æœ‰ Domain Group æ¸…å–®
+REM ¨ú±o©Ò¦³ Domain Group ²M³æ
 net view /domain > %logFolder%\Domain.List.%date:~-15,4%.txt
 
 
-REM å–å¾—æ‰€æœ‰ Domain ä¸‹æœ‰é–‹ç¶²è·¯ share folder çš„é›»è…¦(NBNS/SMB [Samba])
+REM ¨ú±o©Ò¦³ Domain ¤U¦³¶}ºô¸ô share folder ªº¹q¸£(NBNS/SMB [Samba])
 net view > %logFolder%\Samba.Host.%date:~-15,4%.txt
 
-REM åˆ—å‡ºæ‰€æœ‰å…·å‚™ Local Admin çš„ Domain å¸³è™Ÿ
+REM ¦C¥X©Ò¦³¨ã³Æ Local Admin ªº Domain ±b¸¹
 net LOCALGROUP Administrators /domain > %logFolder%\DC.Local.Admin.%date:~-15,4%.txt
 
-REM List "Domain Admins" Group ä¸‹æ‰€æœ‰å¸³è™Ÿ
+REM List "Domain Admins" Group ¤U©Ò¦³±b¸¹
 net group "Domain Admins" /domain > %logFolder%\Domain.Admin.%date:~-15,4%.txt
 
-REM List Local Admins, æœ¬æ©Ÿ Admin å¸³è™Ÿ
+REM List Local Admins, ¥»¾÷ Admin ±b¸¹
 net LOCALGROUP Administrators > %logFolder%\Local.Admin.%date:~-15,4%.txt
 
-REM å‡è¨­ DC admin å¸³è™Ÿç‚º administratorï¼Œå–å¾—å¸³è™Ÿè³‡è¨Š
+REM °²³] DC admin ±b¸¹¬° administrator¡A¨ú±o±b¸¹¸ê°T
 net user /domain administrator > %logFolder%\administrator.Account.%date:~-15,4%.txt
 
 REM List all DC
