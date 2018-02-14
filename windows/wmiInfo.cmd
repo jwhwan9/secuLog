@@ -5,28 +5,28 @@ md %logFolder%
 @echo off
 
 @rem BIOS Info
-wmi bios > %logFolder%\Bios.%date:~-15,4%.txt
+wmic bios > %logFolder%\Bios.%date:~-15,4%.txt
 
-@rem ¨ú±o±Ò°Ê¸ê®Æ
+@rem å–å¾—å•Ÿå‹•è³‡æ–™
 wmic startup > %logFolder%\Startup.%date:~-15,4%.txt
 
-@rem ¨ú±o OS °ò¥»¸ê®Æ
+@rem å–å¾— OS åŸºæœ¬è³‡æ–™
 wmic os > %logFolder%\OSinfo.%date:~-15,4%.txt
 
 
-@rem ¨ú±o process, exe, parameter ¸ê®Æ
+@rem å–å¾— process, exe, parameter è³‡æ–™
 wmic process get caption,executablepath,commandline > %logFolder%\ProcessExe.%date:~-15,4%.txt
 
 
-@rem ¨ú±oµwºÐ Hard Drive¸ê®Æ
+@rem å–å¾—ç¡¬ç¢Ÿ Hard Driveè³‡æ–™
 wmic logicaldisk where drivetype=3 get name, freespace, systemname, filesystem, size, volumeserialnumber >  %logFolder%\HardDisk.%date:~-15,4%.txt
 
-@rem ¨ú±o©Ò¦³ DC ±b¸¹§¹¾ã¸ê°T
+@rem å–å¾—æ‰€æœ‰ DC å¸³è™Ÿå®Œæ•´è³‡è¨Š
 wmic useraccount >  %logFolder%\DCuserAccount.%date:~-15,4%.txt
 wmic useraccount get /ALL >  %logFolder%\DCuserAccount_Detailed.%date:~-15,4%.txt
 
-@rem ¨ú±o¥»¾÷©Ò¦³ share folder
+@rem å–å¾—æœ¬æ©Ÿæ‰€æœ‰ share folder
 wmic share get /ALL >  %logFolder%\ShareFolder.%date:~-15,4%.txt
 
-@rem ¨ú±o±Ò°Êªºµ{¦¡²M³æ
+@rem å–å¾—å•Ÿå‹•çš„ç¨‹å¼æ¸…å–®
 wmic startup list full  > %logFolder%\StartupFullList.%date:~-15,4%.txt
