@@ -12,7 +12,7 @@ cscript GetServer.vbs > %logFolder%\dcHostOU.txt
 
 @REM WMIC System Information
 wmic /Output:"%logFolder%\bios.csv"  bios list full /Format:CSV
-wmic /Output:"%logFolder%\os.csv"  os > os.txt
+wmic /Output:"%logFolder%\os.csv"  os 
 wmic /Output:"%logFolder%\process.csv"  process list full /Format:CSV
 wmic /Output:"%logFolder%\startup.csv"  startup list full /Format:CSV
 wmic /Output:"%logFolder%\service.csv"  service list full /Format:CSV
