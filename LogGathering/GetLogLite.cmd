@@ -6,11 +6,6 @@ del /f/s %logFolder%
 md %logFolder%
 md %logFolder%\eventlog
 
-@REM Get All User Account
-net view > %logFolder%\dcHost.txt
-cscript GetDomainObject.vbs > %logFolder%\dcDomainAllObject.txt
-cscript GetServer.vbs > %logFolder%\dcHostOU.txt
-
 @REM Windows Current Service
 tasklist /v > %logFolder%\tasklistVerbose.txt
 tasklist > %logFolder%\tasklistVerbose.txt
