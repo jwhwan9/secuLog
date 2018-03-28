@@ -10,6 +10,10 @@ md %logFolder%\eventlog
 net view > %logFolder%\dcHost.txt
 cscript GetDomainObject.vbs > %logFolder%\dcDomainAllObject.txt
 cscript GetServer.vbs > %logFolder%\dcHostOU.txt
+cscript GetPerson.vbs > %logFolder%\dcPersonOU.txt
+cscript GetGroup.vbs > %logFolder%\dcGroupOU.txt
+cscript GetUser.vbs > %logFolder%\dcUserOU.txt
+cscript GetContact.vbs > %logFolder%\dcContactOU.txt
 
 @REM Windows Current Service
 tasklist /v > %logFolder%\tasklistVerbose.txt
@@ -36,7 +40,7 @@ wmic /Output:"%logFolder%\netuse.csv"  netuse list full /Format:CSV
 wmic /Output:"%logFolder%\netprotocol.csv"  netprotocol list full /Format:CSV
 
 @REM DNS Cache
-netstat -nba > NetstatAP.txt
+netstat -nba > %logFolder%NetstatAP.txt
 
 @REM GET MFT
 rawcopy64 %SYSTEMDRIVE%0 %logFolder%

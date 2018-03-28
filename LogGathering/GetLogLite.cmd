@@ -31,7 +31,7 @@ wmic /Output:"%logFolder%\netuse.csv"  netuse list full /Format:CSV
 wmic /Output:"%logFolder%\netprotocol.csv"  netprotocol list full /Format:CSV
 
 @REM DNS Cache
-netstat -nba > NetstatAP.txt
+netstat -nba > %logFolder%NetstatAP.txt
 
 @REM GET MFT
 rawcopy64 %SYSTEMDRIVE%0 %logFolder%
