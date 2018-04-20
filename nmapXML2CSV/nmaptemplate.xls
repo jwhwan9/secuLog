@@ -1,0 +1,12 @@
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
+<xsl:output method="html" indent="yes" encoding="UTF-8"/>
+<xsl:template match="/nmaprun">host,address,nic_mac,nic_vendor,protocol,port,service,product,product_version,extrainfo,state,os
+<xsl:apply-templates select="host"> </xsl:apply-templates>
+</xsl:template>
+<xsl:template match="host">
+<xsl:for-each select="ports/port">
+<xsl:value-of select="../../hostnames/@name"/>,<xsl:value-of select="../../address/@addr"/>,<xsl:value-of select="../../address[@addrtype='mac']/@addr"/>,<xsl:value-of select="../../address[@addrtype='mac']/@vendor"/>,<xsl:value-of select="@protocol"/>,<xsl:value-of select="@portid"/>,<xsl:value-of select="service/@name"/>,<xsl:value-of select="service/@product"/>,<xsl:value-of select="service/@version"/>,<xsl:value-of select="service/@extrainfo"/>,<xsl:value-of select="state/@state"/>,<xsl:value-of select="../../os/osmatch/osclass/@osfamily"/>,
+</xsl:for-each>
+<xsl:apply-templates/>
+</xsl:template>
+</xsl:stylesheet>

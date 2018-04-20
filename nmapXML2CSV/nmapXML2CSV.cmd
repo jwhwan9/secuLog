@@ -1,0 +1,1 @@
+msxsl.exe %1 nmaptemplate.xls -o %1.csv
