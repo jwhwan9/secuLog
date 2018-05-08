@@ -1,0 +1,15 @@
+1. 開啟 Excel，載入 csv  或 xlsx 檔案
+
+[新增 VBA]
+2. 按下 Alt + F11
+3. VBAProject -> 滑鼠右鍵 -> 插入(N) -> 模組(M)
+4. 將 Excel_GetHostName.vbs 內容貼到模組編輯器
+
+[編輯 Excel]
+
+5. 新增欄位(Column)在 IP 欄位旁假設 K:Dest IP
+   ->  新增 L:Dest Name
+
+6. 在 L 欄位的 cell 中，加入以下設定
+   -> =GetHostname(K2)
+
