@@ -32,5 +32,5 @@ RegFileExport.exe "%IR_Target%\SYSTEM" "%IR_Target%\SYSTEM.reg.txt"
 RegFileExport.exe "%IR_Target%\UsrClass.dat"  "%IR_Target%\UsrClass.dat.reg.txt"
 
 @REM Export IR Log:Account Activity
-QWinEvent.exe "%IR_Target%\eventlog\Security" > "%IR_Target%\Security.Event.csv"
+QWinEvent.exe "%IR_Target%\eventlog\Security.evtx" > "%IR_Target%\Security.Event.csv"
 
