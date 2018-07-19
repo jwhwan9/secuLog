@@ -146,40 +146,43 @@ wmic /Output:"%logFolder%\netprotocol.csv"  netprotocol list full /Format:CSV
 wmic /Output:"%logFolder%\InstalledAppList.csv"  product list full /Format:CSV
 
 @REM Net Logon
-echo =====
-echo nltest /dclist:nltest /dclist:%UserDOMAIN% %logFolder%\NetlogonDCList.txt
-nltest /dclist:nltest /dclist:%UserDOMAIN% >> %logFolder%\NetlogonDCList.txt
+echo =====[nltest /dclist:%UserDOMAIN% %logFolder%\NetlogonDCList.txt] >> %logFolder%\NetlogonDCList.txt
+nltest  /dclist:%UserDOMAIN% >> %logFolder%\NetlogonDCList.txt
 
-echo =====
-echo nltest /whowill:%USERDOMAIN% %USERNAME% >> %logFolder%\NetlogonDCList.txt
+echo =====[nltest /whowill:%USERDOMAIN% %USERNAME%] >> %logFolder%\NetlogonDCList.txt
 nltest /whowill:%USERDOMAIN% %USERNAME% >> %logFolder%\NetlogonDCList.txt
 
-echo =====
-echo nltest /server:%COMPUTERNAME% /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
+echo =====[nltest /server:%COMPUTERNAME% /sc_query:%USERDOMAIN%] >> %logFolder%\NetlogonDCList.txt
 nltest /server:%COMPUTERNAME% /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
 
-@REM Logon User List
-echo =====
-qwinsta > %logFolder%\Logonuser.txt
+echo =====[nltest /server:dc01  /sc_query:%USERDOMAIN%] >> %logFolder%\NetlogonDCList.txt
+nltest /server:dc01  /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
 
-echo =====
+echo =====[nltest /server:%LogonServer%  /sc_query:%USERDOMAIN%]
+nltest /server:%LogonServer%  /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
+
+@REM Logon User List
+echo =====[qwinsta] > %logFolder%\Logonuser.txt
+qwinsta >> %logFolder%\Logonuser.txt
+
+echo =====[whoami /priv] >> %logFolder%\Logonuser.txt
 whoami /priv >> %logFolder%\Logonuser.txt
 
-echo =====
+echo =====[net users]  >> %logFolder%\Logonuser.txt
 net users  >> %logFolder%\Logonuser.txt
 
-echo =====
+echo =====[net user %USERNAME% /domain] >> %logFolder%\Logonuser.txt
 net user %USERNAME% /domain >> %logFolder%\Logonuser.txt
 
-echo =====
+echo =====[net localgroup Administrators] >> %logFolder%\Logonuser.txt
 net localgroup Administrators >> %logFolder%\Logonuser.txt
 
-echo =====
+echo =====[cmdkey /list] >> %logFolder%\Logonuser.txt
 cmdkey /list >> %logFolder%\Logonuser.txt
 
 @REM Service Information
-echo ===== [sc query]
-sc query > %logFolder%\ServiceInfo.txt
+echo ===== [sc query] > %logFolder%\ServiceInfo.txt
+sc query >> %logFolder%\ServiceInfo.txt
 
 
 @REM DNS Cache
