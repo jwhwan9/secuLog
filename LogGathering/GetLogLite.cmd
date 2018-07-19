@@ -5,7 +5,8 @@ set logFolder=IR.%date:~-15,4%-%date:~-8,2%%date:~-5,2%.%computername%
 del /f/s %logFolder%
 md %logFolder%
 md %logFolder%\eventlog
-
+md %logFolder%\etl
+md %logFolder%\tasks
 
 
 
@@ -20,6 +21,17 @@ copy %SystemRoot%\AppCompat\Programs\RecentFileCache.bcf %logFolder%\
 for /f "delims=[] tokens=2" %%a in ('ping -4 -n 1 %ComputerName% ^| findstr [') do set NetworkIP=%%a
 start /B nbtscan %NetworkIP%/16 > %logFolder%\NetBios_Dump_%NetworkIP%.txt
 
+
+@rem ETL file by ETLParser
+copy %SystemRoot%\ProgramData\Microsoft\Windows\Power Efficiency Diagnostics\energy-ntkl.etl %logFolder%\etl
+copy %SystemRoot%\Panther\setup.etl %logFolder%\etl
+xcopy %SystemRoot%\System32\wdi %logFolder%\etl /Y
+xcopy %SystemRoot%\System32\wdi\LogFiles %logFolder%\etl /Y
+xcopy %SystemRoot%\System32\LogFiles\WMI %logFolder%\etl /Y
+xcopy %USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer %logFolder%\etl /Y
+xcopy "%ProgramData%\Microsoft\Windows\Power Efficiency Diagnostics" %logFolder%\etl /Y
+
+xcopy "%SystemRoot%\tasks" %logFolder%\tasks /Y
 
 @rem Dump Netbios based on Current IP/Class B full
 for /f "delims=[] tokens=2" %%a in ('ping -4 -n 1 %ComputerName% ^| findstr [') do set NetworkIP=%%a
@@ -132,6 +144,43 @@ wmic /Output:"%logFolder%\nic.csv"  nic list full /Format:CSV
 wmic /Output:"%logFolder%\netuse.csv"  netuse list full /Format:CSV
 wmic /Output:"%logFolder%\netprotocol.csv"  netprotocol list full /Format:CSV
 wmic /Output:"%logFolder%\InstalledAppList.csv"  product list full /Format:CSV
+
+@REM Net Logon
+echo =====
+echo nltest /dclist:nltest /dclist:%UserDOMAIN% %logFolder%\NetlogonDCList.txt
+nltest /dclist:nltest /dclist:%UserDOMAIN% >> %logFolder%\NetlogonDCList.txt
+
+echo =====
+echo nltest /whowill:%USERDOMAIN% %USERNAME% >> %logFolder%\NetlogonDCList.txt
+nltest /whowill:%USERDOMAIN% %USERNAME% >> %logFolder%\NetlogonDCList.txt
+
+echo =====
+echo nltest /server:%COMPUTERNAME% /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
+nltest /server:%COMPUTERNAME% /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
+
+@REM Logon User List
+echo =====
+qwinsta > %logFolder%\Logonuser.txt
+
+echo =====
+whoami /priv >> %logFolder%\Logonuser.txt
+
+echo =====
+net users  >> %logFolder%\Logonuser.txt
+
+echo =====
+net user %USERNAME% /domain >> %logFolder%\Logonuser.txt
+
+echo =====
+net localgroup Administrators >> %logFolder%\Logonuser.txt
+
+echo =====
+cmdkey /list >> %logFolder%\Logonuser.txt
+
+@REM Service Information
+echo ===== [sc query]
+sc query > %logFolder%\ServiceInfo.txt
+
 
 @REM DNS Cache
 netstat -nba > %logFolder%\NetstatAP.txt

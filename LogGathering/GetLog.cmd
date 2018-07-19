@@ -5,11 +5,25 @@ set logFolder=IR.%date:~-15,4%-%date:~-8,2%%date:~-5,2%.%computername%
 del /f/s %logFolder%
 md %logFolder%
 md %logFolder%\eventlog
+md %logFolder%\etl
+md %logFolder%\tasks
 
 @REM Netbios Name
 nbtstat -c >  %logFolder%\NetBiosCache.txt
 nbtstat -s >  %logFolder%\NetBiosSession.txt
 nbtstat -n >  %logFolder%\NetBiosName.txt
+
+
+@rem ETL file by ETLParser
+copy %SystemRoot%\ProgramData\Microsoft\Windows\Power Efficiency Diagnostics\energy-ntkl.etl %logFolder%\etl
+copy %SystemRoot%\Panther\setup.etl %logFolder%\etl
+xcopy %SystemRoot%\System32\wdi %logFolder%\etl /Y
+xcopy %SystemRoot%\System32\wdi\LogFiles %logFolder%\etl /Y
+xcopy %SystemRoot%\System32\LogFiles\WMI %logFolder%\etl /Y
+xcopy %USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer %logFolder%\etl /Y
+xcopy "%ProgramData%\Microsoft\Windows\Power Efficiency Diagnostics" %logFolder%\etl /Y
+
+xcopy "%SystemRoot%\tasks" %logFolder%\tasks /Y
 
 @REM Domain User Account Information
 echo --net group /domain-- > %logFolder%\NetDomainAccount.txt
@@ -148,6 +162,42 @@ wmic /Output:"%logFolder%\nic.csv"  nic list full /Format:CSV
 wmic /Output:"%logFolder%\netuse.csv"  netuse list full /Format:CSV
 wmic /Output:"%logFolder%\netprotocol.csv"  netprotocol list full /Format:CSV
 wmic /Output:"%logFolder%\InstalledAppList.csv"  product list full /Format:CSV
+
+@REM Net Logon
+echo =====
+echo nltest /dclist:nltest /dclist:%UserDOMAIN% %logFolder%\NetlogonDCList.txt
+nltest /dclist:nltest /dclist:%UserDOMAIN% >> %logFolder%\NetlogonDCList.txt
+
+echo =====
+echo nltest /whowill:%USERDOMAIN% %USERNAME% >> %logFolder%\NetlogonDCList.txt
+nltest /whowill:%USERDOMAIN% %USERNAME% >> %logFolder%\NetlogonDCList.txt
+
+echo =====
+echo nltest /server:%COMPUTERNAME% /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
+nltest /server:%COMPUTERNAME% /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
+
+@REM Logon User List
+echo =====
+qwinsta > %logFolder%\Logonuser.txt
+
+echo =====
+whoami /priv >> %logFolder%\Logonuser.txt
+
+echo =====
+net users  >> %logFolder%\Logonuser.txt
+
+echo =====
+net user %USERNAME% /domain >> %logFolder%\Logonuser.txt
+
+echo =====
+net localgroup Administrators >> %logFolder%\Logonuser.txt
+
+echo =====
+cmdkey /list >> %logFolder%\Logonuser.txt
+
+@REM Service Information
+echo ===== [sc query]
+sc query > %logFolder%\ServiceInfo.txt
 
 @REM DNS Cache
 netstat -nba > %logFolder%\NetstatAP.txt
