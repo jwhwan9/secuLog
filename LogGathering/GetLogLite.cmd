@@ -7,6 +7,7 @@ md %logFolder%
 md %logFolder%\eventlog
 md %logFolder%\etl
 md %logFolder%\tasks
+md %logFolder%\debug
 
 
 
@@ -14,6 +15,17 @@ md %logFolder%\tasks
 nbtstat -c >  %logFolder%\NetBiosCache.txt
 nbtstat -s >  %logFolder%\NetBiosSession.txt
 nbtstat -n >  %logFolder%\NetBiosName.txt
+
+
+@REM C:\Windows\debug\netlogon.log
+
+Nltest /DBFlag:2080FFFF
+net stop netlogon
+net start netlogon
+
+Nltest /DBFlag:0x0
+net stop netlogon
+net start netlogon
 
 copy %SystemRoot%\AppCompat\Programs\RecentFileCache.bcf %logFolder%\
 
@@ -30,6 +42,7 @@ xcopy %SystemRoot%\System32\wdi\LogFiles %logFolder%\etl /Y
 xcopy %SystemRoot%\System32\LogFiles\WMI %logFolder%\etl /Y
 xcopy %USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer %logFolder%\etl /Y
 xcopy "%ProgramData%\Microsoft\Windows\Power Efficiency Diagnostics" %logFolder%\etl /Y
+xcopy %SystemRoot%\debug %logFolder%\debug /Y
 
 xcopy "%SystemRoot%\tasks" %logFolder%\tasks /Y
 
@@ -155,9 +168,6 @@ nltest /whowill:%USERDOMAIN% %USERNAME% >> %logFolder%\NetlogonDCList.txt
 echo =====[nltest /server:%COMPUTERNAME% /sc_query:%USERDOMAIN%] >> %logFolder%\NetlogonDCList.txt
 nltest /server:%COMPUTERNAME% /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
 
-echo =====[nltest /server:dc01  /sc_query:%USERDOMAIN%] >> %logFolder%\NetlogonDCList.txt
-nltest /server:dc01  /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
-
 echo =====[nltest /server:%LogonServer%  /sc_query:%USERDOMAIN%]
 nltest /server:%LogonServer%  /sc_query:%USERDOMAIN% >> %logFolder%\NetlogonDCList.txt
 
@@ -167,6 +177,9 @@ qwinsta >> %logFolder%\Logonuser.txt
 
 echo =====[whoami /priv] >> %logFolder%\Logonuser.txt
 whoami /priv >> %logFolder%\Logonuser.txt
+
+echo =====[whoami /all] >> %logFolder%\Logonuser.txt
+whoami /all >> %logFolder%\Logonuser.txt
 
 echo =====[net users]  >> %logFolder%\Logonuser.txt
 net users  >> %logFolder%\Logonuser.txt

@@ -7,12 +7,22 @@ md %logFolder%
 md %logFolder%\eventlog
 md %logFolder%\etl
 md %logFolder%\tasks
+md %logFolder%\debug
 
 @REM Netbios Name
 nbtstat -c >  %logFolder%\NetBiosCache.txt
 nbtstat -s >  %logFolder%\NetBiosSession.txt
 nbtstat -n >  %logFolder%\NetBiosName.txt
 
+@REM C:\Windows\debug\netlogon.log
+
+Nltest /DBFlag:2080FFFF
+net stop netlogon
+net start netlogon
+
+Nltest /DBFlag:0x0
+net stop netlogon
+net start netlogon
 
 @rem ETL file by ETLParser
 copy %SystemRoot%\ProgramData\Microsoft\Windows\Power Efficiency Diagnostics\energy-ntkl.etl %logFolder%\etl
@@ -22,6 +32,7 @@ xcopy %SystemRoot%\System32\wdi\LogFiles %logFolder%\etl /Y
 xcopy %SystemRoot%\System32\LogFiles\WMI %logFolder%\etl /Y
 xcopy %USERPROFILE%\AppData\Local\Microsoft\Windows\Explorer %logFolder%\etl /Y
 xcopy "%ProgramData%\Microsoft\Windows\Power Efficiency Diagnostics" %logFolder%\etl /Y
+xcopy %SystemRoot%\debug %logFolder%\debug /Y
 
 xcopy "%SystemRoot%\tasks" %logFolder%\tasks /Y
 
