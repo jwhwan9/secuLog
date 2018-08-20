@@ -24,6 +24,15 @@ Nltest /DBFlag:0x0
 net stop netlogon
 net start netlogon
 
+@REM Logon sessions
+query user /server:%COMPUTERNAME% > %logFolder%\QuerySession.txt
+
+@REM GPO Logon/Logoff script 
+reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy" /s %logFolder%\GPO_LogonScript.reg
+
+@rem Get (USB) Driver Installed log file
+copy %SystemRoot%\inf\*.log %logFolder%\
+
 @rem ETL file by ETLParser
 copy %SystemRoot%\ProgramData\Microsoft\Windows\Power Efficiency Diagnostics\energy-ntkl.etl %logFolder%\etl
 copy %SystemRoot%\Panther\setup.etl %logFolder%\etl
@@ -35,6 +44,9 @@ xcopy "%ProgramData%\Microsoft\Windows\Power Efficiency Diagnostics" %logFolder%
 xcopy %SystemRoot%\debug %logFolder%\debug /Y
 
 xcopy "%SystemRoot%\tasks" %logFolder%\tasks /Y
+
+@rem Stored Credential
+wmic netuse get UserName /value > %logFolder%\storedCredential.txt
 
 @REM Domain User Account Information
 echo --net group /domain-- > %logFolder%\NetDomainAccount.txt

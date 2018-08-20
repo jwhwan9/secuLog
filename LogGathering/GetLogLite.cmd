@@ -16,6 +16,8 @@ nbtstat -c >  %logFolder%\NetBiosCache.txt
 nbtstat -s >  %logFolder%\NetBiosSession.txt
 nbtstat -n >  %logFolder%\NetBiosName.txt
 
+@REM Logon sessions
+query user /server:%COMPUTERNAME% > %logFolder%\QuerySession.txt
 
 @REM C:\Windows\debug\netlogon.log
 
@@ -29,10 +31,16 @@ net start netlogon
 
 copy %SystemRoot%\AppCompat\Programs\RecentFileCache.bcf %logFolder%\
 
+@REM GPO Logon/Logoff script 
+reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy" /s %logFolder%\GPO_LogonScript.reg
+
 @rem Dump Netbios based on Current IP/Class B
 for /f "delims=[] tokens=2" %%a in ('ping -4 -n 1 %ComputerName% ^| findstr [') do set NetworkIP=%%a
 start /B nbtscan %NetworkIP%/16 > %logFolder%\NetBios_Dump_%NetworkIP%.txt
 
+
+@rem Get (USB) Driver Installed log file
+copy %SystemRoot%\inf\*.log %logFolder%\
 
 @rem ETL file by ETLParser
 copy %SystemRoot%\ProgramData\Microsoft\Windows\Power Efficiency Diagnostics\energy-ntkl.etl %logFolder%\etl
@@ -45,6 +53,9 @@ xcopy "%ProgramData%\Microsoft\Windows\Power Efficiency Diagnostics" %logFolder%
 xcopy %SystemRoot%\debug %logFolder%\debug /Y
 
 xcopy "%SystemRoot%\tasks" %logFolder%\tasks /Y
+
+@rem Stored Credential
+wmic netuse get UserName /value > %logFolder%\storedCredential.txt
 
 @rem Dump Netbios based on Current IP/Class B full
 for /f "delims=[] tokens=2" %%a in ('ping -4 -n 1 %ComputerName% ^| findstr [') do set NetworkIP=%%a
