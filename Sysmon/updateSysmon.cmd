@@ -1,0 +1,1 @@
+sysmon -c .\SysmonCfg.xml

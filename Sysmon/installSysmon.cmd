@@ -1,0 +1,1 @@
+sysmon -accepteula ¡Vi .\SysmonCfg.xml ¡Vn
